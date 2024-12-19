@@ -2,6 +2,7 @@ from flask import Flask
 from library_management_app.routes import main
 from library_management_app.extensions import db
 
+
 def create_app():
     app = Flask(__name__)
     app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///library.db'

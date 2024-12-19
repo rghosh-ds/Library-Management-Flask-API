@@ -10,7 +10,13 @@ def get_books():
     page = request.args.get('page', 1, type=int)
     per_page = request.args.get('per_page', 10, type=int)
 
-    pagination = Book.query.paginate(page=page, per_page=per_page)
+    search_query = request.args.get('search', '', type=str)
+
+    query = Book.query
+    if search_query:
+        query = query.filter((Book.title.ilike(f'%{search_query}%')) | (Book.author.ilike(f'%{search_query}%')))
+
+    pagination = query.paginate(page=page, per_page=per_page)
     books = pagination.items
 
     return jsonify({
