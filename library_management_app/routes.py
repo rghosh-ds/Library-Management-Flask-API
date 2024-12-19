@@ -1,23 +1,24 @@
-from flask import Blueprint, jsonify, request
+from flask import Blueprint, jsonify, request, Response
 from flask_jwt_extended import jwt_required, create_access_token, get_jwt_identity
 from werkzeug.security import generate_password_hash, check_password_hash
 from library_management_app.extensions import db
 from library_management_app.models import Book, Member
+from typing import Tuple
 
 main = Blueprint('main', __name__)
 
 
 @main.route('/', methods=['GET'])
 @main.route('/healthcheck', methods=['GET'])
-def healthcheck():
+def healthcheck() -> Response:
     return jsonify({"message": "Server is running"})
 
 
 @main.route('/register', methods=['POST'])
-def register():
+def register() -> Tuple[Response, int]:
     data = request.json
-    username = data.get('username')
-    password = data.get('password')
+    username: str = data.get('username')
+    password: str = data.get('password')
 
     if Member.query.filter_by(username=username).first():
         return jsonify({"message": "Username already exists"}), 400
@@ -31,10 +32,10 @@ def register():
 
 
 @main.route('/login', methods=['POST'])
-def login():
+def login() -> Tuple[Response, int]:
     data = request.json
-    username = data.get('username')
-    password = data.get('password')
+    username: str = data.get('username')
+    password: str = data.get('password')
 
     member = Member.query.filter_by(username=username).first()
     if not member or not check_password_hash(member.password, password):
@@ -46,10 +47,10 @@ def login():
 
 @main.route('/books', methods=['GET'])
 @jwt_required()
-def get_books():
-    page = request.args.get('page', 1, type=int)
-    per_page = request.args.get('per_page', 10, type=int)
-    search_query = request.args.get('search', '', type=str)
+def get_books() -> Response:
+    page: int = request.args.get('page', 1, type=int)
+    per_page: int = request.args.get('per_page', 10, type=int)
+    search_query: str = request.args.get('search', '', type=str)
 
     query = Book.query
     if search_query:
@@ -68,7 +69,7 @@ def get_books():
 
 @main.route('/books', methods=['POST'])
 @jwt_required()
-def add_book():
+def add_book() -> Tuple[Response, int]:
     data = request.json
     new_book = Book(title=data['title'], author=data['author'])
     db.session.add(new_book)

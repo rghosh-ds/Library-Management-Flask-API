@@ -3,7 +3,7 @@ from library_management_app.routes import main
 from library_management_app.extensions import db, jwt
 
 
-def create_app():
+def create_app() -> Flask:
     app = Flask(__name__)
     app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///library.db'
     app.config['JWT_SECRET_KEY'] = 'Better'
