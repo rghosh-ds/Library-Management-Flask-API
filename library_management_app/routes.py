@@ -7,6 +7,12 @@ from library_management_app.models import Book, Member
 main = Blueprint('main', __name__)
 
 
+@main.route('/', methods=['GET'])
+@main.route('/healthcheck', methods=['GET'])
+def healthcheck():
+    return jsonify({"message": "Server is running"})
+
+
 @main.route('/register', methods=['POST'])
 def register():
     data = request.json
