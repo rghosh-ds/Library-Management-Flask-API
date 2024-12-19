@@ -1,6 +1,7 @@
-from flask import Blueprint, request, jsonify
-from . import db
-from .models import Book
+from flask import Blueprint, jsonify, request
+from library_management_app.extensions import db
+from library_management_app.models import Book
+
 
 main = Blueprint('main', __name__)
 
