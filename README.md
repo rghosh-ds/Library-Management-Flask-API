@@ -1,6 +1,6 @@
 # Library Management System
 
-A simple Library Management System built with Flask and SQLAlchemy.
+A simple Library Management API built with Flask and SQLAlchemy.
 
 ## Features
 - User registration and login (with JWT authentication)
